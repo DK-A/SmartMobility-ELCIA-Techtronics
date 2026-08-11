@@ -1,6 +1,6 @@
 # 🚁 Smart Mobility & Road Incident Intelligence (Command Center)
 
-![Dashboard UI](./assets/dashboard_mockup.jpg)
+![Dashboard UI](./assets/dashboard_live.png)
 
 <br/>
 
