@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Incident Intelligence | Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07090f;
+            --sidebar-bg: rgba(14, 18, 25, 0.85);
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --border: rgba(56, 189, 248, 0.2);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary: #38bdf8;
+            --alert-red: #ef4444;
+            --warning-orange: #f59e0b;
+            --success-green: #10b981;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.05), transparent 30%);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+        }
+
+        .brand {
+            padding: 0 1.5rem 2rem 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 1rem;
+        }
+
+        .nav-item {
+            padding: 1rem 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item.active, .nav-item:hover {
+            color: #fff;
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 70px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--alert-red);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--alert-red);
+            animation: pulse-anim 1.5s infinite;
+        }
+
+        @keyframes pulse-anim {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .dashboard-grid {
+            display: flex;
+            flex: 1;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            height: calc(100vh - 70px);
+            box-sizing: border-box;
+        }
+
+        /* Video Section */
+        .video-section {
+            flex: 2;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .video-header {
+            padding: 1rem;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-container {
+            flex: 1;
+            position: relative;
+            background: #000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Telemetry Section */
+        .telemetry-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .panel h3 {
+            margin: 0 0 1rem 0;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .alert-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--alert-red);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .alert-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--alert-red);
+            text-transform: uppercase;
+        }
+
+        select {
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 6px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            background: var(--alert-red);
+            color: white;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            SMART MOBILITY
+        </div>
+        <a href="#" class="nav-item active">Live Feed</a>
+        <a href="#" class="nav-item">Incident Logs</a>
+        <a href="#" class="nav-item">Radar Metrics</a>
+        <a href="#" class="nav-item">Drone Fleet</a>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="live-status">
+                <div class="pulse"></div>
+                LIVE SENSOR FUSION SYSTEM
+            </div>
+            <div>
+                <span class="stat-label" style="margin-right: 10px;">Simulation Source:</span>
+                <select id="videoSelect" onchange="changeVideo()">
+                    <option value="/test_videos/wrong_way_drone1.mp4">Scenario 1: Wrong-Way Movement</option>
+                    <option value="/test_videos/drone_stoppage.mp4">Scenario 2: Traffic Stoppage</option>
+                    <option value="/test_videos/sample_traffic_mock.mp4">Scenario 3: Normal Baseline</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="video-section">
+                <div class="video-header">
+                    <span style="font-family: 'Rajdhani'; font-size: 1.2rem; font-weight: 600; letter-spacing: 1px;">DRONE OPTICAL FEED #04</span>
+                    <span class="badge" id="camera-status">ACTIVE TRACKING</span>
+                </div>
+                <div class="video-container">
+                    <img id="dashboardVideo" src="/video_feed?video=wrong_way_drone1.mp4" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <div class="telemetry-section">
+                <div class="panel" style="flex: 1;">
+                    <h3>Incident Telemetry</h3>
+                    
+                    <div class="stat-row">
+                        <span class="stat-label">Classification</span>
+                        <span class="stat-value" id="incident-type" style="color: var(--alert-red);">WRONG-WAY MOVEMENT</span>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <span class="stat-label">Severity</span>
+                        <span class="stat-value" id="incident-severity" style="color: var(--alert-red);">HIGH</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-label">Target ID</span>
+                        <span class="stat-value" id="target-id">Vehicle-17</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-label">Fused Velocity</span>
+                        <span class="stat-value" id="velocity" style="color: var(--primary); font-family: 'Orbitron';">-18.0 km/h</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span class="stat-label">System Confidence</span>
+                        <span class="stat-value" id="confidence">93.5%</span>
+                    </div>
+
+                    <div class="alert-box">
+                        <h4>Recommended Action</h4>
+                        <p style="margin: 0; font-size: 0.9rem;" id="rec-action">Alert operator and dispatch highway patrol immediately.</p>
+                    </div>
+                </div>
+
+                <div class="panel" style="flex: 1;">
+                    <h3>Sensor Evidence</h3>
+                    <ul id="evidence-list" style="padding-left: 20px; line-height: 1.8; color: var(--text-muted); font-size: 0.95rem;">
+                        <li>Camera trajectory ID: Vehicle-17</li>
+                        <li>Radar zero-doppler corroborated</li>
+                        <li>4.2s persistence achieved</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeVideo() {
+            const video = document.getElementById('dashboardVideo');
+            const select = document.getElementById('videoSelect');
+            const filename = select.value.split('/').pop();
+            video.src = "/video_feed?video=" + filename;
+        }
+
+        // Poll API for live events
+        setInterval(() => {
+            fetch('/api/events')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.type) {
+                        document.getElementById('incident-type').innerText = data.type;
+                        document.getElementById('incident-severity').innerText = data.severity;
+                        document.getElementById('target-id').innerText = data.target;
+                        document.getElementById('velocity').innerText = data.velocity + " km/h";
+                        document.getElementById('confidence').innerText = data.confidence + "%";
+                        
+                        const sevEl = document.getElementById('incident-severity');
+                        const typeEl = document.getElementById('incident-type');
+                        const color = data.severity === 'HIGH' ? 'var(--alert-red)' : (data.severity === 'MEDIUM' ? 'var(--warning-orange)' : 'var(--success-green)');
+                        sevEl.style.color = color;
+                        typeEl.style.color = color;
+                        
+                        const evList = document.getElementById('evidence-list');
+                        evList.innerHTML = '';
+                        data.evidence.forEach(item => {
+                            const li = document.createElement('li');
+                            li.innerText = item;
+                            evList.appendChild(li);
+                        });
+                        
+                        document.getElementById('rec-action').innerText = data.action;
+                    }
+                });
+        }, 1000);
+    </script>
+</body>
+</html>

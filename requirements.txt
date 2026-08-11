@@ -1,0 +1,13 @@
+# Vision
+opencv-python
+torch
+torchvision
+ultralytics
+numpy
+
+# Radar DSP
+scipy
+
+# Dashboard
+flask
+jinja2
