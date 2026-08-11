@@ -9,9 +9,15 @@
 
 ---
 
-## 🚀 The Proposed Ideology
+## 🚨 Problem Statement
 
-Urban expressways, such as those in Electronics City, frequently experience dynamic and highly localized traffic incidents that rapidly propagate into severe network congestion. Conventional traffic monitoring heavily relies on fixed IP cameras, which suffer from **spatial blind spots**, **occlusion**, and **high transmission latency**.
+Urban road networks experience dynamic and localized traffic incidents such as wrong-way vehicle movement, prolonged vehicle stoppages, lane blockages, and sudden disruptions. Conventional traffic-monitoring infrastructure primarily depends on fixed roadside cameras which provide continuous observation only within predetermined fields of view. 
+
+Consequently, incidents occurring outside camera coverage, between monitored junctions, or in areas affected by occlusion can remain undetected until they manifest as severe congestion. Furthermore, visual observation alone is often insufficient to distinguish between normal traffic behavior (a temporarily stopped vehicle) and an actual incident (a stationary road blockage).
+
+---
+
+## 🚀 The Proposed Ideology
 
 **Our Solution:** A dynamic, drone-based edge-computing platform that fuses optical (Vision) and radio (Radar) telemetry locally at the edge. By shifting the computational workload to the drone's companion computer (e.g., NVIDIA Jetson), we dramatically reduce latency and false positive rates (FPR) for detecting critical anomalies like **Wrong-Way Driving** and **Stationary Blockages**.
 
